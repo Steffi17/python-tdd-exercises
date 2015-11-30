@@ -175,8 +175,8 @@ def base_pair(c):
     return 'unknown'.
     """
     dic={'a':'t', 't':'a', 'c':'g', 'g':'c'}
-    if c.lower in dic{}:
-        return dic{c}
+    if c.lower() in dic.keys():
+        return dic[c.lower()]
     else:
         return 'unknown'
 
