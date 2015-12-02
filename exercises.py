@@ -202,8 +202,8 @@ def transcribe_dna_to_rna(s):
     Return string s with each letter T replaced by U.
     Result is always uppercase.
     """
-    return None
-
+    y=s.upper()
+    return y.replace('T', 'U')
 
 def test_transcribe_dna_to_rna():
     dna = 'CCGGAAGAGCTTACTTAGccggaagagcttacttag'
@@ -217,8 +217,13 @@ def get_complement(s):
     Return the DNA complement in uppercase
     (A -> T, T-> A, C -> G, G-> C).
     """
-    return None
-
+    s_complement=''
+    for c in s:
+        s_complement += base_pair(c)
+    return s_complement.upper()
+#    y=s.upper()
+#    dic={'A':'T', 'T':'A', 'C':'G', 'G':'C'}
+#   return dic(y)
 
 def test_get_complement():
     assert get_complement('CCGGAAGAGCTTACTTAG') == 'GGCCTTCTCGAATGAATC'
@@ -232,8 +237,8 @@ def get_reverse_complement(s):
     Return the reverse complement of string s
     (complement reversed in order).
     """
-    return None
 
+    return reverse_string(get_complement(s))
 
 def test_get_reverse_complement():
     assert get_reverse_complement('CCGGAAGAGCTTACTTAG') == 'CTAAGTAAGCTCTTCCGG'
@@ -246,7 +251,7 @@ def remove_substring(substring, string):
     """
     Returns string with all occurrences of substring removed.
     """
-    return None
+    return string.replace(substring,'')
 
 
 def test_remove_substring():
@@ -264,7 +269,11 @@ def get_position_indices(triplet, dna):
     in a DNA sequence. We start counting from 0
     and jump by 3 characters from one position to the next.
     """
-    return None
+    l=[]
+    for i in range(int(len(dna)/3)):
+        if triplet==dna[i*3:i*3+3]:
+            l.append(i)
+    return l
 
 
 def test_get_position_indices():
@@ -283,7 +292,16 @@ def get_3mer_usage_chart(s):
     The list is alphabetically sorted by the name
     of the 3-mer.
     """
-    return None
+    d={}
+    for i in range(len(s)-2):
+        kmer=s[i:i+3]
+        if kmer in d:
+            d[kmer]+=1
+        else:
+            d[kmer]=1
+    l=list(d.items())
+    l.sort()
+    return l
 
 
 def test_get_3mer_usage_chart():
@@ -314,7 +332,13 @@ def read_column(file_name, column_number):
     Reads column column_number from file file_name
     and returns the values as floats in a list.
     """
-    return None
+    l=[]
+    with open(file_name, 'r') as f:
+        for line in f:
+            words=line.split()
+            if len(words)>0:
+                l.append(float(words[column_number -1]))
+    return l
 
 
 def test_read_column():
@@ -343,7 +367,6 @@ def test_read_column():
 
 
 # ------------------------------------------------------------------------------
-
 def character_statistics(file_name):
     """
     Reads text from file file_name, then
@@ -353,7 +376,19 @@ def character_statistics(file_name):
     Use the isalpha() method to figure out
     whether the character is in the alphabet.
     """
-    return None
+    d={}
+    with open(file_name, 'r') as f:
+        for c in f.read().lower():
+            if c.isalpha():
+                if c in d:
+                    d[c]+=1
+                else:
+                    d[c]=1
+    l=list(d.items())
+    l=sorted(l,key=lambda x:x[1],reverse=True)
+    most=l[0][0]
+    least=l[-1][0]
+    return (most,least)
 
 
 def test_character_statistics():
@@ -386,7 +421,7 @@ With a bare bodkin? who would fardels bear,
 To grunt and sweat under a weary life,
 But that the dread of something after death,
 The undiscover'd country from whose bourn
-No traveller returns, puzzles the will
+No traveller returns, puzzzles the will
 And makes us rather bear those ills we have
 Than fly to others that we know not of?
 Thus conscience does make cowards of us all;
